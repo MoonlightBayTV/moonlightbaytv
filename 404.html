@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>404 Not Found - MoonlightBay Plus</title>
+    <script src="/head-config.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .error-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            /* Memberi jarak agar tidak tertutup bottom nav di mobile */
+            padding-bottom: 80px; 
+        }
+
+        .error-icon {
+            font-size: 5rem;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        .error-container h1 {
+            font-size: 6rem;
+            margin: 0;
+            color: #00e5ff;
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+            line-height: 1;
+        }
+
+        .error-container h2 {
+            font-size: 1.5rem;
+            margin: 10px 0 15px;
+            font-weight: 700;
+        }
+
+        .error-container p {
+            color: #cdcdcd;
+            margin-bottom: 30px;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .btn-home {
+            background-color: transparent;
+            border: 2px solid #00e5ff;
+            color: #00e5ff;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-home:hover {
+            background-color: #00e5ff;
+            color: #121212;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <div class="error-container">
+        <i class="fa-solid fa-tv error-icon"></i>
+        <h1>404</h1>
+        <h2>Waduh, Siaran Terputus!</h2>
+        <p>Maaf, halaman atau channel yang kamu cari tidak ditemukan, mungkin sedang gangguan atau sudah dipindahkan.</p>
+        <a href="/" class="btn-home">Kembali ke Home</a>
+    </div>
+
+    <script src="/main.js"></script>
+
+</body>
+</html>
