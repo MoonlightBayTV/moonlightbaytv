@@ -11,6 +11,10 @@ const headContent = `
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+    <link href='assets/img/Icon%20App.png' rel='apple-touch-icon'/>
+    <meta content='yes' name='apple-mobile-web-app-capable'/>
+    <meta content='default' name='apple-mobile-web-app-status-bar-style'/>
+    <meta content='MoonlightBay Plus' name='apple-mobile-web-app-title'/>
 `;
 
 // Suntikkan ke bagian paling atas <head>
