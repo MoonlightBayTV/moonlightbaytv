@@ -71,63 +71,50 @@ nav {
   text-decoration: none;
 }
 
-/* --- Tampilan Desktop (Default) --- */
-.bottom-nav {
-    display: none; /* Sembunyikan menu bawah di komputer */
+/* Sembunyikan footer di Desktop */
+footer {
+    display: none;
 }
 
-/* --- Tampilan Mobile (Portrait) --- */
-@media screen and (max-width: 768px) {
-    /* 1. Sembunyikan Menu Navigasi Atas & Tombol Download */
-    .desktop-only {
-        display: none !important;
-    }
-
-    /* 2. Atur Navbar Atas agar hanya ada Logo di tengah/kiri */
-    nav {
-        justify-content: center; /* Logo di tengah untuk kesan rapi di HP */
-        height: 50px;
-    }
-
-    /* 3. Tampilkan & Atur Bottom Nav Bar */
-    .bottom-nav {
+/* Tampilan Mobile Portrait */
+@media (max-width: 832px) {
+    footer {
+        background-color: #000000b3 !important;
+        backdrop-filter: blur(7px);
+        -webkit-backdrop-filter: blur(7px); /* Dukungan untuk Safari/iOS */
+        padding: 10px 0;
         display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-top: 1px solid #444;
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        height: 65px;
-        background: #121212; /* Warna gelap solid agar teks terbaca */
-        border-top: 1px solid #333;
-        justify-content: space-around;
-        align-items: center;
         z-index: 1000;
-        padding-bottom: env(safe-area-inset-bottom); /* Support layar poni/curved HP baru */
+        /* Padding bawah tambahan untuk HP berponi bawah (iPhone/Android terbaru) */
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
     }
 
-    .nav-item {
-        color: #888;
+    footer .menu-item {
+        font-family: 'Montserrat', sans-serif;
+        text-align: center;
+        flex: 1;
+    }
+
+    footer .menu-item a {
+        font-size: 0.75rem; /* Ukuran teks lebih proporsional */
         text-decoration: none;
+        color: #fff;
         display: flex;
         flex-direction: column;
         align-items: center;
-        font-size: 11px;
-        transition: 0.3s;
     }
 
-    .nav-item.active {
-        color: #fff; /* Warna putih untuk menu yang sedang dibuka */
-    }
-
-    /* Styling Icon (Gunakan font-awesome atau icon pack favoritmu) */
-    .nav-item i {
-        font-size: 20px;
+    footer .menu-item i {
+        font-size: 1.4rem;
+        display: block;
         margin-bottom: 4px;
-    }
-    
-    /* Berikan margin bawah pada body agar konten tidak tertutup Bottom Nav */
-    body {
-        margin-bottom: 70px;
     }
 }
 
@@ -136,6 +123,7 @@ nav {
 .card { background: #333; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; transition: 0.3s; }
 .card:hover { border: 1px solid var(--accent); transform: scale(1.05); }
 .card img { width: 100%; border-radius: 5px; }
+
 
 
 
