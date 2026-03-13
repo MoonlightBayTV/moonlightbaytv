@@ -85,16 +85,31 @@ nav.scrolled {
     border-top: 2px solid #00e5ff; /* Garis Cyan Khas MoonlightBay */
     box-shadow: 0 8px 16px rgba(0,0,0,0.5);
     z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px); /* Mulai dari 15px lebih rendah */
+    transition: all 0.3s ease-in-out; /* Durasi 0.3 detik yang smooth */
+}
 }
 
 /* Tampilkan saat di-hover (Desktop) */
 .nav-item.dropdown:hover .dropdown-menu {
     display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 /* Styling Item di dalam Submenu */
 .dropdown-menu li {
     border-bottom: 1px solid #222; /* Garis pemisah tipis */
+    transform: translateX(-10px);
+    transition: transform 0.3s ease;
+    transition-delay: 0.1s;
+}
+
+.nav-item.dropdown:hover .dropdown-menu li {
+    transform: translateX(0);
 }
 
 .dropdown-menu li:last-child {
@@ -302,6 +317,7 @@ input, textarea {
 .card { padding: 1px; border-radius: 8px; font-size: 1.2rem; text-align: center; cursor: pointer; transition: 0.3s; }
 .card:hover { border: 1px solid var(--accent); transform: scale(1.05); }
 .card img { width: 100%; border-radius: 5px; }
+
 
 
 
