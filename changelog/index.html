@@ -4,84 +4,201 @@
     <title>Changelog - MoonlightBay Plus</title>
     <script src="/head-config.js"></script>
 <style>
-	body {
-		display: flex;
-		justify-content: center;
-		flex-direction: column;
-		gap: 36px;
-	)
-		
-	.container {
-		padding: 80px 20px;
-		max-width: 529px;
-		display: flex;
-		flex-direction: column;
-		gap: 36px;
-	}
-		
-    .content {
-        background-color: #2f2f2f;
-        border-radius: 1rem;
-        border: 1px solid black;
-        font-size: 1.2rem;
-        padding: 1rem;
-        padding-bottom: 2rem;
+    body {
+        background-color: #121212;
         color: white;
+        font-family: 'Montserrat', sans-serif; /* Mengikuti branding utama */
     }
-	    @media only screen and (max-width: 350px) {
-        .container {
-            max-width: 188px;
-        }
-    
-        .freq-display {
-            font-size: 90px;
-        }
-    
-        .btn {
-            margin: 7px 42px;
-        }
-     
-        .dock {
-            width: 100%;
-        }
+
+    .container {
+        padding: 100px 20px;
+        max-width: 800px; /* Dibuat lebih lebar agar enak dibaca di desktop */
+        margin: auto;
+    }
+
+    .changelog-header {
+        margin-bottom: 50px;
+        text-align: left;
+    }
+
+    .changelog-header h1 {
+        font-size: 3rem;
+        font-weight: 900;
+        color: #00e5ff;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+    }
+
+    .changelog-header p {
+        color: #888;
+        font-size: 1.1rem;
+    }
+
+    /* Struktur Timeline */
+    .timeline {
+        position: relative;
+        border-left: 2px solid #333;
+        padding-left: 30px;
+        margin-left: 10px;
+    }
+
+    .changelog-item {
+        position: relative;
+        margin-bottom: 60px;
+    }
+
+    /* Titik di Garis Timeline */
+    .changelog-item::before {
+        content: "";
+        position: absolute;
+        left: -41px;
+        top: 5px;
+        width: 20px;
+        height: 20px;
+        background: #121212;
+        border: 4px solid #00e5ff;
+        border-radius: 50%;
+        z-index: 1;
+    }
+
+    .content-card {
+        background: #1e1e1e;
+        border-radius: 15px;
+        padding: 25px;
+        border: 1px solid #333;
+        transition: 0.3s;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .content-card:hover {
+        border-color: #00e5ff;
+        transform: translateY(-5px);
+    }
+
+    .badge-version {
+        background: #00e5ff;
+        color: #000;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+
+    .content-card h2 {
+        margin: 5px 0 10px 0;
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
+
+    .content-card date {
+        display: block;
+        color: #888;
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        font-style: italic;
+    }
+
+    .content-card p {
+        color: #ccc;
+        line-height: 1.7;
+        font-size: 1rem;
+    }
+
+    .content-card ul {
+        padding-left: 20px;
+        color: #ccc;
+    }
+
+    .content-card li {
+        margin-bottom: 8px;
+    }
+
+    /* Link Style */
+    .content-card a {
+        color: #00e5ff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .content-card a:hover {
+        text-decoration: underline;
+    }
+
+    .author {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #333;
+        color: #555;
+        font-size: 0.85rem;
+        font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+        .changelog-header h1 { font-size: 2rem; }
+        .timeline { padding-left: 20px; }
+        .changelog-item::before { left: -31px; }
     }
 </style>
 </head>
 <body>
     <div id="navbar-placeholder"></div>
     <div class="container">
-       <div class="content">
-			<h2>MoonlightBay Player, Radio Player baru Resmi Rilis</h2>
-            <date>September 11, 2025</date>
-			<p>
-				Dengan menyambut Hari Radio Nasional. kini MoonlightBay Plus secara resmi menghadirkan fitur baru yakni MoonlightBay Player, Radio Player dari MoonlightBay, sebuah inovasi baru untuk mendengarkan Radio dengan mudah, gratis, tanpa ribet, praktis sampai bebas cookie. Support di semua device manapun!, MoonlightBay Player ini lahir karena terciptanya Radio Kit yang sukses menarik seluruh kalangan pendengar yakni Damar Player yang bisa dibilang sukses menciptakan Radio Player bebas persyaratan device maupun yang masih belum move-on sama Radio geser2, kalo ini cocok banget!. Setel sekarang di website Resmi MoonlightBay Plus https://moonlightbayapp.github.io/radio
-			</p>
-			<p>
-				- Terra Markov
-			</p>
-		</div>
-        <div class="content">
-			<h2>Rilis v1.0 Official</h2>
-            <date>September 12, 2022</date>
-			<p>
-				<p><span style="font-family: arial;">MoonlightBay Plus adalah Aplikasi Hiburan yang menjadi Alternative Nonton TV dan dengarkan Radio dengan sangat mudah, dimana Semua Saluran tersebut hanya sebuah Shortcut yang dimana kita memudahkan mengeklik Saluran TV &amp; Radio yang kita inginkan, Misalnya kita ingin Pilih Saluran "SCTV" atau Cari LCN nya di kolom search "8" di Aplikasi ini, kita langsung pergi ke Sumber aslinya, kita tidak perlu repot sana-sini</span></p><p><span style="font-family: arial;">Fitur :</span></p><p><span style="font-family: arial;">- Sharing Video</span></p><p><span style="font-family: arial;">- Baca Berita (sumber dri CNN Indonesia)</span></p><p><span style="font-family: arial;">- Interaksi Publik</span></p><p><span style="font-family: arial;">- Shorcut Live TV dgn LCN (akan update sewaktu2)</span></p><p><span style="font-family: arial;">- Shorcut Live Radio (akan update sewaktu2)</span></p><p><span style="font-family: arial;">- Support Android 11 keatas <i><span style="color: #999999; font-size: x-small;">*tested</span></i></span></p><p><span style="font-family: arial;">- Update Notifikasi</span></p>
-			</p>
-			<p>
-				- admin
-			</p>
-		</div>
-       <div class="content">
-			<h2>DOWNLOAD IPTV INDONESIA .M3U TERBARU</h2>
-            <date>October 26, 2019</date>
-			<p>
-				<span style="font-family: &quot;arial&quot; , &quot;helvetica&quot; , sans-serif;"><b>SILAHKAN <a href="https://drive.google.com/file/d/1eQLhSywCaYl8WCfi1vE1JJ3-waOXuomP/view?usp=drivesdk">DOWNLOAD</a> SALURAN TV NYA</b></span>.
-			</p>
-			<p>
-				- admin
-			</p>
-		</div>
-        
+    <div class="changelog-header">
+        <h1>Changelog</h1>
+        <p>Riwayat pembaruan dan jejak digital MoonlightBay Plus.</p>
     </div>
+
+    <div class="timeline">
+        
+        <div class="changelog-item">
+            <div class="content-card">
+                <span class="badge-version">New Feature</span>
+                <h2>MoonlightBay Player Resmi Rilis</h2>
+                <date>September 11, 2025</date>
+                <p>
+                    Menyambut Hari Radio Nasional, kini MoonlightBay Plus menghadirkan <strong>MoonlightBay Player</strong>. Sebuah inovasi untuk mendengarkan Radio dengan praktis, gratis, dan bebas cookie.
+                </p>
+                <p>Mendukung semua perangkat tanpa ribet! Cek sekarang di: <a href="/radio">moonlightbayapp.github.io/radio</a></p>
+                <div class="author">— Terra Markov</div>
+            </div>
+        </div>
+
+        <div class="changelog-item">
+            <div class="content-card">
+                <span class="badge-version">v1.0 Stable</span>
+                <h2>Rilis v1.0 Official</h2>
+                <date>September 12, 2022</date>
+                <p>Aplikasi hiburan alternatif untuk nonton TV dan dengerin radio melalui satu pintu (Shortcut). Cukup klik dan nikmati siaran langsung dari sumber aslinya.</p>
+                <strong>Fitur Utama:</strong>
+                <ul>
+                    <li>Sharing Video & Interaksi Publik</li>
+                    <li>Baca Berita (Sumber: CNN Indonesia)</li>
+                    <li>Shortcut Live TV & Radio dengan sistem LCN</li>
+                    <li>Support Android 11+ (Tested)</li>
+                </ul>
+                <div class="author">— Admin</div>
+            </div>
+        </div>
+
+        <div class="changelog-item">
+            <div class="content-card">
+                <span class="badge-version">Legacy Update</span>
+                <h2>Update Link IPTV Indonesia .M3U</h2>
+                <date>October 26, 2019</date>
+                <p>Pembaruan daftar saluran TV Indonesia dalam format .m3u untuk pemutar pihak ketiga.</p>
+                <a href="https://drive.google.com/file/d/1eQLhSywCaYl8WCfi1vE1JJ3-waOXuomP/view?usp=drivesdk" target="_blank">
+                   <i class="fa-solid fa-download"></i> Download Saluran TV (.m3u)
+                </a>
+                <div class="author">— Admin</div>
+            </div>
+        </div>
+
+    </div>
+</div>
   <script src="/main.js"></script>
 </body>
 </html>
