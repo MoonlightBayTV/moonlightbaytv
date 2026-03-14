@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>News Ticker OBS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Penting agar hanya ticker yang terlihat */
+    font-family: 'Arial', sans-serif;
+}
+
+#news-ticker-container {
+    position: absolute;
+    bottom: 0; /* Posisi di bagian bawah layar OBS */
+    left: 0;
+    width: 100%;
+    height: 55px; /* Tinggi bar ticker */
+    margin-bottom: 46px; /* Safe area */
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.85); /* Latar belakang gelap transparan */
+    color: white;
+    z-index: 1000;
+}
+
+/* Kotak Jam */
+#clock-box {
+    background-color: none
+    height: 100%;
+    padding: 0 15px;
+    padding-left: 112px;
+    display: flex;
+    align-items: center;
+    font-family: Montserrat;
+    font-weight: bold;
+    font-size: 1.9em;
+    min-width: 150px; /* Lebar minimum kotak jam */
+}
+
+#live-text {
+    padding: 2px 5px;
+    margin-right: 10px;
+    border-radius: 3px;
+    font-size: 0.8em;
+}
+
+/* Area Ticker Berita */
+#ticker-area {
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap; /* Penting agar teks tidak turun baris */
+}
+
+#news-ticker {
+    display: inline-block;
+    padding-left: 100%; /* Memastikan teks dimulai dari luar layar */
+    animation: scroll-left linear infinite;
+    /* Durasi animasi akan diatur oleh JavaScript jika diperlukan, 
+       tapi disini kita pakai CSS dasar */
+    animation-duration: 45s; 
+}
+
+.ticker-item {
+    padding-right: 30px; /* Jarak antar berita */
+    font-family: SF Pro Text;
+    font-size: 1.9em;
+    font-weight: 500;
+}
+
+/* Efek Gulir (Scrolling) */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+  </style>
+</head>
+<body>
+    <div id="news-ticker-container">
+        <div id="clock-box">
+            <span id="current-time">00:00</span>
+            <span id="live-text">WIB</span>
+        </div>
+        
+        <div id="ticker-area">
+            <div id="news-ticker">
+                <span class="ticker-item">Memuat berita...</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+const rssUrl = 'https://www.viva.co.id/get/all'; // GANTI dengan URL RSS Anda
+const tickerElement = document.getElementById('news-ticker');
+const timeElement = document.getElementById('current-time');
+const newsLimit = 5; // Jumlah berita yang ingin ditampilkan
+
+// Fungsi untuk memperbarui jam
+function updateClock() {
+    const now = new Date();
+    // Format waktu (HH:MM:SS)
+    const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    timeElement.textContent = timeString;
+}
+
+// Fungsi untuk mengambil dan memparsing RSS
+async function fetchRSS() {
+    // PENTING: Pengambilan RSS secara langsung (fetch) dari file lokal ke domain lain 
+    // akan diblokir oleh kebijakan CORS browser.
+    // Solusi: Gunakan layanan proxy RSS-to-JSON (misalnya, rss2json.com) 
+    // atau host file HTML/JS ini di server Anda dan gunakan proxy server-side.
+
+    // Contoh menggunakan placeholder data karena batasan CORS:
+    console.log(`Mencoba mengambil RSS dari: ${rssUrl}`);
+    
+    // Placeholder data
+    const placeholderItems = [
+        { title: "150 ANAK JADI TERSANGKA KASUS NARKOBA, SUMUT TERTINGGI" },
+        { title: "KENAIKAN IURAN BPJS KESEHATAN 2026 BELUM DIPUTUSKAN" },
+        { title: "WASIT WANITA UNGKAP DIMINTA KURANGI PENAMPILAN MENCOLOK" },
+        { title: "PURBAYA MINTA BPJS KESEHATAN EVALUASI AGAR TAGIHAN TAK MEMBENGKAK" }
+    ];
+
+displayNews(placeholderItems);
+    
+    /* // Contoh implementasi nyata menggunakan proxy (misalnya rss2json.com):
+    
+    const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+    try {
+        const response = await fetch(proxyUrl);
+        const data = await response.json();
+
+        if (data.status === 'ok') {
+            displayNews(data.items);
+        } else {
+            tickerElement.innerHTML = '<span class="ticker-item">Gagal memuat berita RSS. Periksa URL atau layanan proxy.</span>';
+        }
+
+    } catch (error) {
+        console.error('Error fetching RSS:', error);
+        tickerElement.innerHTML = '<span class="ticker-item">Error jaringan atau konfigurasi.</span>';
+    }
+    */
+}
+
+// Fungsi untuk menampilkan berita
+function displayNews(items) {
+    let tickerContent = '';
+    const itemsToDisplay = items.slice(0, newsLimit);
+    
+    if (itemsToDisplay.length === 0) {
+        tickerContent = '<span class="ticker-item">Tidak ada berita yang tersedia.</span>';
+    } else {
+        itemsToDisplay.forEach(item => {
+            // Tambahkan judul berita dengan pemisah
+            tickerContent += `<span class="ticker-item">// ${item.title}</span>`;
+        });
+        // Gandakan konten agar guliran terlihat mulus dan terus menerus
+        tickerContent += tickerContent; 
+    }
+    
+    tickerElement.innerHTML = tickerContent;
+}
+
+
+// Inisialisasi
+updateClock(); // Tampilkan jam segera
+setInterval(updateClock, 1000); // Perbarui jam setiap detik
+
+fetchRSS(); // Ambil berita RSS
+// Atur agar RSS diperbarui secara berkala (misalnya, setiap 5 menit)
+// setInterval(fetchRSS, 5 * 60 * 1000);
+  </script>
+</body>
+</html>
