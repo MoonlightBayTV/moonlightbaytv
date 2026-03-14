@@ -249,7 +249,69 @@ background-color: var(--background-dark);
 ::-webkit-scrollbar-thumb:hover {
     background: #adabab; 
 }
+      
+#mobile-bottom-bar {
+    display: none;
+}
 
+/* Hanya muncul pada layar HP (Lebar maksimal 768px) */
+@media only screen and (max-width: 768px) {
+    #mobile-bottom-bar {
+        display: flex;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        background: linear-gradient(to top, rgba(0,0,0,1), rgba(10, 60, 124, 0.9)); /* Gradasi Biru Indovision */
+        border-top: 2px solid var(--accent-yellow);
+        z-index: 30; /* Di atas video tapi di bawah sidebar */
+        justify-content: space-around;
+        align-items: center;
+        padding-bottom: env(safe-area-inset-bottom); /* Support Notch iPhone */
+    }
+
+    .nav-btn {
+        background: none;
+        border: none;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        height: 100%;
+        transition: background 0.2s;
+    }
+
+    .nav-btn:active {
+        background: rgba(255, 195, 0, 0.2); /* Efek saat ditekan */
+    }
+
+    .nav-btn .icon {
+        font-size: 20px;
+        margin-bottom: 4px;
+    }
+
+    .nav-btn .label {
+        font-size: 10px;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: var(--accent-yellow);
+    }
+
+    /* Penyesuaian agar video tidak tertutup bar */
+    #tv-player {
+        height: calc(100% - 70px) !important;
+    }
+    
+    /* Geser OSD info sedikit ke atas agar tidak tertutup bar */
+    #channel-info-overlay {
+        bottom: 85px !important;
+        width: 90% !important;
+        margin-left: 5% !important;
+    }
+}
    </style>
 </head>
 <body class="prevent-select" oncontextmenu="return false;">
@@ -264,7 +326,26 @@ background-color: var(--background-dark);
             <button class="fullscreen-btn" id="fullscreen-btn"><i class="fa-solid fa-expand"></i></button>
             <div id="current-time">16:45:30 WIB</div>
         </div>
-
+        
+<div id="mobile-bottom-bar">
+    <button class="nav-btn" id="m-btn-prev">
+        <span class="icon">⏮</span>
+        <span class="label">Prev</span>
+    </button>
+    <button class="nav-btn" id="m-btn-list">
+        <span class="icon">☰</span>
+        <span class="label">List</span>
+    </button>
+    <button class="nav-btn" id="m-btn-info">
+        <span class="icon">ⓘ</span>
+        <span class="label">Info</span>
+    </button>
+    <button class="nav-btn" id="m-btn-next">
+        <span class="icon">⏭</span>
+        <span class="label">Next</span>
+    </button>
+</div>
+        
         <video id="tv-player" class="video-js vjs-default-skin" controls preload="auto">
             </video>
 
@@ -319,7 +400,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const swipeThreshold = 50; // Jarak swipe minimal (dalam pixel)
     
     let infoTimeout;
+    const mBtnPrev = document.getElementById('m-btn-prev');
+    const mBtnList = document.getElementById('m-btn-list');
+    const mBtnInfo = document.getElementById('m-btn-info');
+    const mBtnNext = document.getElementById('m-btn-next');
 
+    if (mBtnPrev) {
+        mBtnPrev.addEventListener('click', (e) => {
+            e.stopPropagation(); // Mencegah konflik sentuhan lain
+            prevChannel();
+        });
+    }
+
+    if (mBtnNext) {
+        mBtnNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            nextChannel();
+        });
+    }
+
+    if (mBtnInfo) {
+        mBtnInfo.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showInfoOverlay();
+        });
+    }
+
+    if (mBtnList) {
+        mBtnList.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle('hidden');
+        });
+    }
     // --- FUNGSI INTI ---
 
     // Fungsi untuk memuat dan memutar saluran
