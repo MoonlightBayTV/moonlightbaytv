@@ -15,14 +15,19 @@ const headContent = `
     <meta content='yes' name='apple-mobile-web-app-capable'/>
     <meta content='default' name='apple-mobile-web-app-status-bar-style'/>
     <meta content='MoonlightBay Plus' name='apple-mobile-web-app-title'/>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XS00CDL5GD"></script>
 `;
 
 // Suntikkan ke bagian paling atas <head>
 document.head.insertAdjacentHTML('afterbegin', headContent);
 
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+// --- GOOGLE ANALYTICS (GA4) INJECTION ---
+const gaScript = document.createElement('script');
+gaScript.async = true;
+gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-XS00CDL5GD";
+document.head.appendChild(gaScript);
 
-  gtag('config', 'G-XS00CDL5GD');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-XS00CDL5GD');
