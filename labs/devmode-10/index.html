@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watchman Test Beta (Unstable) - MoonlightBay Plus</title>
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href=".../favicon.png">
+    <link href="https://unpkg.com/videojs-chromecast/dist/videojs-chromecast.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+:root {
+    --primary-blue: #0A3C7C; /* Biru gelap khas */
+    --accent-yellow: #FFC300; /* Aksen Kuning/Emas */
+    --background-dark: #1A1A1A; /* Hitam semi gelap */
+    --text-light: #FFFFFF;
+}
+
+body {
+background-color: var(--background-dark);
+    color: var(--text-light);
+    font-family: Arial, Helvetica, sans-serif; /* Font umum yang bersih dan tebal */
+    margin: 0;
+    min-height: 100vh; 
+    width: 100vw; 
+}
+
+#tv-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    max-width: none; /* Hapus batasan max-width */
+    box-shadow: none; /* Hilangkan shadow di mode Fullscreen */
+    border: none; /* Hilangkan border di mode Fullscreen */
+    background-color: #2a2a2a00);
+    overflow: hidden; /* Penting untuk mencegah sidebar yang bergeser menyebabkan scroll */
+}
+
+/* --- Video Player Styling --- */
+#tv-player {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9; /* Rasio aspek standar TV */
+}
+
+/* Hilangkan kontrol bawaan video.js (opsional, karena kita pakai overlay) */
+.video-js .vjs-control-bar {
+    background-color: rgba(18, 18, 18, 0.7);
+    transition: all 0.3s ease;
+}
+
+.fullscreen-btn {
+    --primary-color: #3a3a3a;
+    --secondary-color: #fff;
+    --hover-color: #313131;
+    --arrow-width: 10px;
+    --arrow-stroke: 2px;
+    position: fixed; 
+    bottom: 50px; 
+    right: 20px; 
+    z-index: 50;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 100px;
+    color: var(--secondary-color);
+    padding: 1.0em;
+    background: var(--primary-color);
+    display: flex;
+    transition: 0.2s background;
+    align-items: center;
+    gap: 0.6em;
+    font-weight: bold;
+}
+
+.fullscreen-btn:visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fullscreen-btn:hover {
+    background-color: var(--hover-color);
+}
+
+.fullscreen-btn:hover .arrow {
+    background: var(--secondary-color);
+}
+
+.fullscreen-btn:hover .arrow:before {
+    right: 0;
+}
+
+/* Hilangkan kontrol bawaan Video.js agar terlihat clean */
+.video-js .vjs-control-bar {
+    display: none !important;
+}
+
+/* --- Overlay Info Saluran (OSD) - Diletakkan di Bawah --- */
+#channel-info-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 20px 25px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    opacity: 0; /* Mulai tersembunyi */
+    transition: opacity 0.5s ease;
+}
+
+#channel-info-overlay.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.number-tag {
+    /* Angka Saluran yang besar dan tebal */
+    color: var(--accent-yellow);
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 3.8em;
+    margin-right: 20px;
+}
+
+.program-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#channel-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #FFFFFF; /* Nama Saluran menggunakan warna aksen */
+}
+
+#program-title {
+    font-size: 0.9em;
+    color: #CCCCCC;
+    margin-top: 2px;
+}
+
+#current-time {
+    font-size: 1em;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-left: 20px;
+    align-self: flex-end; /* Posisikan waktu di sudut kanan bawah overlay */
+}
+
+/* --- Sidebar Daftar Saluran (Menu Vertikal) --- */
+#channel-list-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 350px; /* Lebar sidebar */
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.98); /* Lebih gelap */
+    z-index: 20;
+    
+    /* Pastikan transisi mulus */
+    transform: translateX(0); 
+    transition: transform 0.4s ease-out;
+    padding-top: 50px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    
+    pointer-events: all;
+    visibility: visible;
+}
+
+#channel-list-sidebar.hidden {
+    transform: translateX(-100%); /* Sembunyikan ke kiri */
+    pointer-events: none;
+    visibility: hidden;
+}
+
+#channel-list-sidebar h3 {
+    text-align: left;
+    color: var(--accent-yellow);
+    padding: 0 20px 15px 20px;
+    border-bottom: 3px solid var(--primary-blue);
+    margin-top: 0;
+    font-size: 1.8em;
+}
+
+#channel-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#channel-list li {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 1.1em;
+    border-bottom: 1px solid #292929;
+    transition: background-color 0.1s;
+}
+
+#channel-list li:hover,
+#channel-list li.active {
+    background-color: var(--primary-blue); /* Highlight biru saat aktif/hover */
+    color: var(--text-light);
+    border-left: 5px solid var(--accent-yellow); /* Aksen kuning di samping */
+    padding-left: 15px; /* Sesuaikan padding karena border kiri */
+}
+
+#channel-list li span:first-child {
+    font-weight: bold;
+    margin-right: 15px;
+    color: var(--accent-yellow); /* Angka saluran dengan warna aksen */
+}
+
+/* Reset warna aksen saat aktif */
+#channel-list li.active span:first-child {
+    color: var(--text-light);
+}
+
+/* Mematikan select text (opsional) */
+    .prevent-select {
+      -webkit-user-select: none; /* Safari */
+      -ms-user-select: none; /* IE 10 and IE 11 */
+      user-select: none; /* Standard syntax */
+    }
+
+/* Custom Scrollbar*/
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #6b6b6b; 
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #adabab; 
+}
+
+   </style>
+</head>
+<body class="prevent-select" oncontextmenu="return false;">
+
+    <div id="tv-container">
+        <div id="channel-info-overlay">
+            <span id="channel-number" class="number-tag">001</span>
+            <div class="program-details">
+                <span id="channel-name">Saluran HLS Uji Coba</span>
+                <span id="program-title">Now Watching: Panduan Coding HLS</span>
+            </div>
+            <button class="fullscreen-btn" id="fullscreen-btn"><i class="fa-solid fa-expand"></i></button>
+            <div id="current-time">16:45:30 WIB</div>
+        </div>
+
+        <video id="tv-player" class="video-js vjs-default-skin" controls preload="auto">
+            </video>
+
+        <div id="channel-list-sidebar" class="hidden">
+            <h3>List Channel</h3>
+            <ul id="channel-list">
+                </ul>
+        </div>
+    </div>
+
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. DAFTAR SALURAN
+    const channels = [
+        { number: 0, name: "Testcard (Pre-Beta Version)", url: "8.8.8.8", program: "Tekan panah atas/bawah di Keyboard, untuk ganti saluran" },
+        { number: 1, name: "TVRI Nasional", url: "https://op-group1-swiftservesd-1.dens.tv/s/s11/01.m3u8", program: "TVRI Nasional" },
+        { number: 2, name: "TVRI JAKARTA", url: "https://ott-balancer.tvri.go.id/live/eds/DKI/hls/DKI.m3u8", program: "TVRI JAKARTA" },
+        { number: 4, name: "TVRI Sport", url: "https://ott-balancer.tvri.go.id/live/eds/SportHD/hls/SportHD.m3u8", program: "TVRI Sport"},
+        { number: 5, name: "DAAI TV", url: "https://pull.daaiplus.com/live-DAAIPLUS/live-DAAIPLUS_SD.m3u8", program: "DAAI TV"},
+        { number: 11, name: "KOMPAS TV HD", url: "https://op-group1-swiftservehd-1.dens.tv/s/s104/01.m3u8", program: "KOMPAS TV HD" },
+        { number: 16, name: "MDTV", url: "https://op-group1-swiftservehd-1.dens.tv/h/h223/02.m3u8", program: "MDTV" },
+        { number: 17, name: "GARUDA TV HD", url: "https://hgmtv.com:19360/garudatvlivestreaming/576p.m3u8", program: "GARUDA TV HD" },
+        { number: 19, name: "CNN INDONESIA HD", url: "https://live.cnnindonesia.com/livecnn/smil:cnntv.smil/index.m3u8", program: "CNN INDONESIA HD" },
+        { number: 22, name: "METRO TV HD", url: "https://op-group1-swiftservehd-1.dens.tv/h/h12/01.m3u8", program: "METRO TV HD" },
+        { number: 23, name: "SCTV HD", url: "http://op-group1-swiftservehd-1.dens.tv/h/h217/01.m3u8", program: "SCTV HD" },
+        { number: 25, name: "RTV HD1", url: "https://op-group1-swiftservehd-1.dens.tv/h/h10/01.m3u8", program: "RTV HD1" },
+        { number: 26, name: "ANTV", url: "https://op-group1-swiftservehd-1.dens.tv/s/s07/01.m3u8", program: "ANTV HD" },
+        { number: 27, name: "TVONE HD", url: "https://op-group1-swiftservehd-1.dens.tv/h/h40/01.m3u8", program: "TVONE HD" },
+        { number: 32, name: "Nusantara TV", url: "https://nusantaratv.siar.us/nusantaratv/live/playlist.m3u8", program: "Nusantara TV" },
+        { number: 35, name: "MOJI HD", url: "http://op-group1-swiftservehd-1.dens.tv/h/h207/01.m3u8", program: "MOJI HD" },
+        { number: 37, name: "VTV HD", url: "https://flv.intechmedia.net/live/ch107.m3u8", program: "VTV HD" },
+        { number: 38, name: "MAGNA CHANNEL", url: "https://edge.medcom.id/live-edge/smil:magna.smil/playlist.m3u8", program: "MAGNA CHANNEL" },
+        { number: 45, name: "Jawapos TV", url: "https://jawapostv.siar.us/jawapostv/live/playlist.m3u8", program: "Jawapos TV" },
+        { number: 51, name: "BTV HD", url: "https://btv.secureswiftcontent.com/han/btv/btv10005/srtoutput/hvideo-640x360.m3u8", program: "BTV HD" },
+        { number: 52, name: "BERITA SATU HD", url: "https://beritasatu.secureswiftcontent.com/han/beritasatu/bsatu10008/srtoutput/manifest.m3u8", program: "BERITA SATU HD" },
+        { number: 104, name: "JTV", url: "https://63b2dc7196c38.streamlock.net/JTVSURABAYA/_definst_/myStream/playlist.m3u8", program: "JTV" },
+        { number: 106, name: "ASTHA TV", url: "https://hgmtv.com:19360/asthatv/720p.m3u8", program: "ASTHA TV" },
+    ];
+
+    let currentChannelIndex = 0;
+    const video = document.getElementById('tv-player');
+    const player = videojs('tv-player'); // Inisialisasi video.js
+    const sidebar = document.getElementById('channel-list-sidebar');
+    const channelListUl = document.getElementById('channel-list');
+    const infoOverlay = document.getElementById('channel-info-overlay');
+    const tvContainer = document.getElementById('tv-container');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    let touchstartX = 0;
+    let touchendX = 0;
+    const swipeThreshold = 50; // Jarak swipe minimal (dalam pixel)
+    
+    let infoTimeout;
+
+    // --- FUNGSI INTI ---
+
+    // Fungsi untuk memuat dan memutar saluran
+    function loadAndPlayChannel(index) {
+        if (index < 0) {
+            index = channels.length - 1;
+        } else if (index >= channels.length) {
+            index = 0;
+        }
+        currentChannelIndex = index;
+        const channel = channels[currentChannelIndex];
+        
+        // 1. Handling HLS
+        if (Hls.isSupported()) {
+            // Gunakan hls.js
+            const hls = new Hls();
+            hls.loadSource(channel.url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            // Dukungan HLS native (misalnya di Safari)
+            video.src = channel.url;
+            video.play();
+        } else {
+            alert('Browser Anda tidak mendukung HLS.');
+            return;
+        }
+
+        // 2. Perbarui Tampilan Overlay
+        updateChannelInfo(channel);
+        
+        // 3. Perbarui Tampilan Sidebar
+        updateSidebarActiveStatus();
+    }
+
+    // --- FUNGSI BARU UNTUK FULLSCREEN ---
+    
+    // Fungsi untuk menyembunyikan semua overlay
+    function hideAllOverlays() {
+        infoOverlay.classList.remove('visible'); // Sembunyikan Info
+        sidebar.classList.add('hidden');       // Sembunyikan Sidebar
+    }
+
+    // Fungsi untuk mengaktifkan mode Fullscreen
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            // Masuk mode Fullscreen, terapkan pada container utama
+            tvContainer.requestFullscreen().catch(err => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+            });
+        } else {
+            // Keluar mode Fullscreen
+            document.exitFullscreen();
+        }
+    }
+
+    // Tambahkan event listener untuk tombol opsional
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+    }
+
+    // Mendeteksi saat Player memasuki mode Fullscreen
+    player.on('fullscreenchange', function() {
+        if (player.isFullscreen()) {
+            // Jika masuk mode fullscreen, sembunyikan semua overlay
+            hideAllOverlays();
+            
+            // Nonaktifkan event listener keyboard saat fullscreen
+            document.removeEventListener('keydown', handleKeyDown);
+        } else {
+            // Jika keluar dari mode fullscreen, aktifkan kembali event listener keyboard
+            document.addEventListener('keydown', handleKeyDown);
+        }
+    });
+
+    // Fungsi untuk memperbarui overlay info saluran
+    function updateChannelInfo(channel) {
+        document.getElementById('channel-number').textContent = String(channel.number).padStart(3, '0');
+        document.getElementById('channel-name').textContent = channel.name;
+        document.getElementById('program-title').textContent = `Now Watching: ${channel.program}`;
+        
+        showInfoOverlay();
+    }
+
+    // Fungsi untuk menampilkan overlay info saluran
+    function showInfoOverlay() {
+        // Hapus timeout sebelumnya
+        clearTimeout(infoTimeout); 
+        // Tampilkan overlay
+        infoOverlay.classList.add('visible'); 
+        // Atur agar overlay hilang setelah 5 detik
+        infoTimeout = setTimeout(() => {
+            infoOverlay.classList.remove('visible');
+        }, 5000); 
+    }
+
+    // Fungsi untuk mengganti ke saluran berikutnya
+    function nextChannel() {
+        loadAndPlayChannel(currentChannelIndex + 1);
+    }
+
+    // Fungsi untuk mengganti ke saluran sebelumnya
+    function prevChannel() {
+        loadAndPlayChannel(currentChannelIndex - 1);
+    }
+
+    // Fungsi untuk memperbarui jam
+    function updateTime() {
+        const now = new Date();
+        document.getElementById('current-time').textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+    }
+
+    // --- INIALISASI DAN EVENT LISTENER ---
+
+    // 1. Isi Sidebar Daftar Saluran
+    channels.forEach((channel, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${String(channel.number).padStart(3, '0')}</span> ${channel.name}`;
+        li.dataset.index = index;
+        li.addEventListener('click', () => {
+            loadAndPlayChannel(index);
+            // Sembunyikan sidebar setelah memilih
+            sidebar.classList.add('hidden'); 
+        });
+        channelListUl.appendChild(li);
+    });
+
+    // 2. Fungsi Status Aktif Sidebar
+    function updateSidebarActiveStatus() {
+        channelListUl.querySelectorAll('li').forEach((li, index) => {
+            li.classList.remove('active');
+            if (index === currentChannelIndex) {
+                li.classList.add('active');
+            }
+        });
+    }
+
+    // 3. Event Listener Keyboard (Simulasi Remote)
+    document.addEventListener('keydown', (e) => {
+        switch (e.key) {
+            case 'ArrowDown': // Tombol CH+ (atau Prev Channel)
+                prevChannel();
+                break;
+            case 'ArrowUp': // Tombol CH- (atau Next Channel)
+                nextChannel();
+                break;
+            case 'i': // Tombol Info
+                showInfoOverlay();
+                break;
+            case 'Enter': // Tombol OK/List
+            case ' ': // Tombol Spacebar
+                // Toggle (tampilkan/sembunyikan) sidebar
+                sidebar.classList.toggle('hidden'); 
+                break;
+            case 'f': // Tekan 'f' untuk Fullscreen
+            case 'F': 
+                toggleFullscreen();
+                break;
+        }
+        e.preventDefault(); // Mencegah aksi default browser (misal scroll)
+    });
+
+    // 4. Update Jam Setiap Detik
+    setInterval(updateTime, 1000);
+
+    // 5. Muat Saluran Pertama Saat Startup
+    loadAndPlayChannel(0); 
+    updateTime(); 
+    });
+
+// Fungsi untuk memperbarui metadata Media Session
+function updateMediaSession(channel) {
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: channel.name, // Nama Saluran
+            artist: "MoonlightBay Plus", // Nama Aplikasi/Layanan
+            album: channel.program // Nama Program yang sedang tayang
+            // Anda juga bisa menambahkan artwork jika ada
+            /* artwork: [
+                { src: 'logo-channel.png', sizes: '96x96', type: 'image/png' },
+            ]
+            */
+        });// Opsi: Tambahkan listener untuk kontrol media (misalnya tombol 'Skip Next/Previous')
+        navigator.mediaSession.setActionHandler('previoustrack', () => {
+            prevChannel(); 
+        });
+        navigator.mediaSession.setActionHandler('nexttrack', () => {
+            nextChannel();
+        });
+        
+        // Atur agar tombol play/pause di notifikasi bekerja pada video player
+        navigator.mediaSession.setActionHandler('play', () => {
+            videojs('tv-player').play();
+        });
+        navigator.mediaSession.setActionHandler('pause', () => {
+            videojs('tv-player').pause();
+        });
+    }
+}
+ 
+// --- LOGIKA TOUCH/SWIPE REVISI UNTUK MOBILE (LEBIH ROBUST) ---
+
+    let touchstartX = 0;
+    const swipeThreshold = 70; // Tingkatkan threshold sedikit
+
+    function handleGesture(e) {
+        if (e.changedTouches.length !== 1) return; // Abaikan multi-touch
+
+        const touchendX = e.changedTouches[0].screenX;
+        const diffX = touchendX - touchstartX;
+        
+        // Hanya proses jika pergerakannya horizontal (untuk mengabaikan scroll vertikal)
+        if (Math.abs(diffX) < swipeThreshold) {
+            return; // Jarak swipe terlalu pendek
+        }
+
+        if (diffX < 0) {
+            // Swipe ke KIRI (touchendX < touchstartX): Saluran Berikutnya
+            console.log("Swipe Left: Next Channel");
+            nextChannel();
+        } 
+        
+        if (diffX > 0) {
+            // Swipe ke KANAN (touchendX > touchstartX): Saluran Sebelumnya
+            console.log("Swipe Right: Previous Channel");
+            prevChannel();
+        }
+    }
+
+    // Listener pada container utama untuk menangkap sentuhan
+    tvContainer.addEventListener('touchstart', e => {
+        if (e.touches.length === 1) {
+            touchstartX = e.touches[0].screenX;
+        }
+    }, { passive: false }); // Gunakan passive: false untuk mengizinkan preventDefault
+
+    // Listener pada container utama untuk menangani gerakan
+    tvContainer.addEventListener('touchmove', e => {
+        // PENTING: Mencegah scroll default browser di iOS
+        if (e.touches.length === 1) {
+            e.preventDefault(); 
+        }
+    }, { passive: false }); 
+
+    // Listener pada container utama untuk menyelesaikan gesture
+    tvContainer.addEventListener('touchend', handleGesture);
+    
+    // ... (sisa kode inisialisasi dan event listener keyboard) ...
+  </script>
+</body>
+</html>
