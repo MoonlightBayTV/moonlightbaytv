@@ -15,6 +15,7 @@ const headContent = `
     <meta content='yes' name='apple-mobile-web-app-capable'/>
     <meta content='default' name='apple-mobile-web-app-status-bar-style'/>
     <meta content='MoonlightBay Plus' name='apple-mobile-web-app-title'/>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XS00CDL5GD"></script>
 `;
 
 // Suntikkan ke bagian paling atas <head>
