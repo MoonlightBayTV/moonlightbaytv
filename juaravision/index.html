@@ -216,6 +216,16 @@ background-color: var(--background-dark);
     color: var(--accent-yellow); /* Angka saluran dengan warna aksen */
 }
 
+* {
+    -webkit-tap-highlight-color: transparent; /* Hapus warna biru saat tombol di-klik */
+    -webkit-touch-callout: none;              /* Matikan menu klik kanan/tahan di gambar */
+    user-select: none;                        /* Cegah user copy-paste teks agar terasa seperti app */
+}
+
+input, textarea {
+    user-select: text;                        /* Biarkan teks tetap bisa diisi di kolom input */
+}
+
 /* Reset warna aksen saat aktif */
 #channel-list li.active span:first-child {
     color: var(--text-light);
