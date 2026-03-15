@@ -28,6 +28,7 @@ nav {
 nav.scrolled {
   background: #000000b3!important;
   backdrop-filter: blur(7px)!important;
+  -webkit-backdrop-filter: blur(7px); /* Agar jalan di Safari/iOS */
 }
 /* Ukuran Logo agar tidak kekecilan */
 .nav-logo {
