@@ -8,3 +8,13 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     .catch(error => console.error('Error loading navbar:', error));
 });
+
+// Fungsi untuk mendeteksi scroll dan menambah class 'scrolled'
+window.addEventListener('scroll', function() {
+    const nav = document.querySelector('nav'); // Pastikan tag navbar kamu adalah <nav>
+    if (window.scrollY > 50) { // Jika discroll lebih dari 50px
+        nav.classList.add('scrolled');
+    } else {
+        nav.classList.remove('scrolled');
+    }
+});
