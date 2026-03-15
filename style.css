@@ -76,7 +76,7 @@ nav.scrolled {
     position: absolute;
     top: 150%; /* Muncul tepat di bawah navbar */
     left: 0;
-    background-color: #111; /* Hitam pekat agar kontras */
+    background-color: #1f1f1f; /* Hitam pekat agar kontras */
     min-width: 200px;
     list-style: none;
     padding: 0;
@@ -86,7 +86,7 @@ nav.scrolled {
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(15px); /* Mulai dari 15px lebih rendah */
+    transform: translateY(-10px); /* Mulai dari 15px lebih rendah */
     transition: all 0.3s ease-in-out; /* Durasi 0.3 detik yang smooth */
 }
 
