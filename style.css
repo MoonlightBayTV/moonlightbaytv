@@ -309,6 +309,7 @@ input, textarea {
         z-index: 1000;
         /* Padding bawah tambahan untuk HP berponi bawah (iPhone/Android terbaru) */
         padding-bottom: calc(10px + env(safe-area-inset-bottom));
+        transform: translateY(10px);
     }
 
     footer .menu-item {
