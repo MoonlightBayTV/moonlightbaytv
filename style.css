@@ -222,105 +222,183 @@ footer {
 }
 
 /* --- Style Halaman Contact Us --- */
-.contact-page {
-    padding-top: 100px !important;
+.contact-page-wrapper * {
+    box-sizing: border-box; /* Kunci agar padding tidak bikin kolom melebar */
+}
+
+.contact-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 100px 20px 40px; /* Padding top untuk ruang navbar */
+    background: #0f0f0f;
 }
 
 .contact-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #1a1a1a;
+    width: 100%;
+    max-width: 650px;
     padding: 40px;
     border-radius: 20px;
-    max-width: 600px;
-    width: 90%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
-.contact-form {
-    margin-top: 30px;
+.contact-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.contact-header h1 {
+    font-family: 'Poppins', sans-serif;
+    color: #00d4ff;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.contact-header p {
+    color: #888;
+    font-size: 0.95rem;
+}
+
+/* Form Styling */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 .input-group {
     margin-bottom: 20px;
 }
 
-.input-group input, .input-group textarea {
-    width: 100%;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    outline: none;
-    transition: 0.3s;
+.input-group label {
+    display: block;
+    color: #ccc;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    font-weight: 500;
 }
 
-.input-group input:focus, .input-group textarea:focus {
+.input-group input, 
+.input-group textarea {
+    width: 100%;
+    background: #252525;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 12px 15px;
+    color: #fff;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus, 
+.input-group textarea:focus {
+    outline: none;
     border-color: #00d4ff;
-    background: rgba(255, 255, 255, 0.08);
+    background: #2a2a2a;
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
 }
 
 .btn-send {
     width: 100%;
-    padding: 15px;
     background: #00d4ff;
     color: #000;
+    padding: 15px;
     border: none;
     border-radius: 10px;
-    font-weight: bold;
-    font-size: 16px;
+    font-weight: 700;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
     transition: 0.3s;
+    margin-top: 10px;
 }
 
 .btn-send:hover {
     background: #00e5ff;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
 }
 
-.separator {
-    margin: 40px 0;
-    border: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+/* Divider Sosial Media */
+.divider {
+    text-align: center;
+    position: relative;
+    margin: 40px 0 25px;
 }
 
-/* --- Social Media Buttons --- */
+.divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #333;
+    z-index: 1;
+}
+
+.divider span {
+    background: #1a1a1a;
+    padding: 0 15px;
+    color: #555;
+    font-size: 0.8rem;
+    position: relative;
+    z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Social Grid Sejajar */
 .social-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 20px;
+    grid-template-columns: repeat(3, 1fr); /* 3 Kolom di Desktop */
+    gap: 12px;
 }
 
-.social-btn {
+.social-item {
+    text-decoration: none;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
+    gap: 8px;
     transition: 0.3s;
 }
 
-.social-btn i { margin-right: 10px; font-size: 18px; }
+/* Warna Sosmed */
+.fb { background: #1877F2; }
+.ig { background: #E4405F; }
+.th { background: #000; border: 1px solid #333; }
+.tw { background: #000; border: 1px solid #333; }
+.yt { background: #CD201F; }
+.tk { background: #000; border: 1px solid #333; }
 
-/* Brand Colors */
-.facebook { background: #1877F2; }
-.instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-.threads { background: #000000; border: 1px solid #444; }
-.x-twitter { background: #000000; border: 1px solid #444; }
-.youtube { background: #FF0000; }
-.tiktok { background: #010101; border: 1px solid #444; }
+.social-item:hover {
+    filter: brightness(1.2);
+    transform: translateY(-3px);
+}
 
-.social-btn:hover { transform: scale(1.05); filter: brightness(1.2); }
-
-@media (max-width: 480px) {
-    .social-grid { grid-template-columns: 1fr; }
+/* Responsif Mobile */
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr; /* Kolom nama & email jadi tumpuk di HP */
+    }
+    
+    .social-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 Kolom di HP */
+    }
+    
+    .contact-card {
+        padding: 25px;
+    }
 }
 /* --- TEMA KHUSUS --- */
 
