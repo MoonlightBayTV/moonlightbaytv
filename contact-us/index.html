@@ -3,33 +3,43 @@
 <head>
     <title>HUBUNGI KAMI - MoonlightBay Plus</title>
     <script src="/head-config.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
-    <style>
-        .container {
-            padding: 100px 0px;
-            max-width: none;
-            width: 94%;
-        }
-        
-        h1 {
-            font-family: Arial;
-            font-weight: 700;
-            font-size: x-large;"
-        }
-        
-        p {
-            margin : 0px;
-        }
-    </style>
 <body>
-
     <div id="navbar-placeholder"></div>
 
-    <div class="container">
-        <h1>HUBUNGI KAMI</h1>
-<span style="font-family: arial, helvetica, sans-serif;"><b>ALAMAT<br />Gedung JuaraVision Jakarta, 19000<br />CONTACT<br />Facebook : Juara Vision<br />Twitter : @juaravisionid<br />Instagram : @juaravisionid <br />E-mail : contact.juaravision@gmail.com</b></span>
-        </div>
-    <script src="/main.js"></script>
+    <div class="status-container contact-page">
+        <div class="contact-card">
+            <h1>Hubungi Kami</h1>
+            <p>Punya pertanyaan, saran, atau laporan channel rusak? Kirimkan pesan Anda di bawah ini.</p>
 
+            <form action="https://formspree.io/f/your-id-here" method="POST" class="contact-form">
+                <div class="input-group">
+                    <input type="text" name="name" placeholder="Nama Lengkap" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Alamat Email" required>
+                </div>
+                <div class="input-group">
+                    <textarea name="message" rows="5" placeholder="Tulis pesan Anda di sini..." required></textarea>
+                </div>
+                <button type="submit" class="btn-send">Kirim Pesan <i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+
+            <hr class="separator">
+
+            <h3>Ikuti Kami di Media Sosial</h3>
+            <div class="social-grid">
+                <a href="https://www.facebook.com/moonlightbaytv" class="social-btn facebook"><i class="fa-brands fa-facebook"></i> @moonlightbaytv</a>
+                <a href="https://www.instagram.com/moonlightbay_tv" class="social-btn instagram"><i class="fa-brands fa-instagram"></i> @moonlightbay_tv</a>
+                <a href="https://www.threads.com/@moonlightbay_tv" class="social-btn threads"><i class="fa-brands fa-threads"></i> @moonlightbay_tv</a>
+                <a href="https://x.com/MoonlightBay_TV" class="social-btn x-twitter"><i class="fa-brands fa-x-twitter"></i> @moonlightbay_tv</a>
+                <a href="https://www.youtube.com/@MoonlightBay_TV" class="social-btn youtube"><i class="fa-brands fa-youtube"></i> @MoonlightBay_TV</a>
+                <a href="https://www.tiktok.com/@moonlightbay_tv" class="social-btn tiktok"><i class="fa-brands fa-tiktok"></i> @moonlightbay_tv</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/main.js"></script>
 </body>
 </html>
