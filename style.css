@@ -273,7 +273,7 @@ input, textarea {
 }
 /* Tampilan Mobile Portrait */
 @media (max-width: 832px) {
-    container {
+    .container {
         padding: 58px 11px;
     }
     
